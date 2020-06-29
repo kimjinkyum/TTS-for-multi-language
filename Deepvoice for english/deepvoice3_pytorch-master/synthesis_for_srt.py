@@ -95,8 +95,8 @@ def load_srt(srt_path, bounding_path):
 
     bounding_data = pd.read_csv(bounding_path);
     result = []
+    #srt_re = re.compile('''(\d+)\n([0-9]+:[0-9]+:[0-9]+,[0-9]+) --> ([0-9]+:[0-9]+:[0-9]+,[0-9]+)\n([0-9a-zA-Z ?!'".,\-\n]+)\n\n''')
     srt_re = re.compile('''(\d+)\n([0-9]+:[0-9]+:[0-9]+,[0-9]+) --> ([0-9]+:[0-9]+:[0-9]+,[0-9]+)\n([0-9a-zA-Z ?!'".,\-\n]+)(\n\n|$)''')
-
     with open(srt_path, "r") as f:
         atext = f.read();
         for i in srt_re.finditer(atext):
@@ -120,9 +120,12 @@ def load_srt(srt_path, bounding_path):
             for i in range(0,len(texts)):
                 weight = (i + 1) / (len(texts) + 1)
                 speaker_id = getSpeaker(start, end, weight, bounding_data)
+                
+                if (speaker_id==-1):
+                    speaker_id=0;
+                result.append([idx, start, end, speaker_id, texts[i]])
                 print(speaker_id, start,end, texts[i])
-                if (speaker_id != -1):
-                    result.append([idx, start, end, speaker_id, texts[i]])
+                    
                 
     return result
                 
@@ -202,7 +205,7 @@ if __name__ == "__main__":
         text = i[4]
        
         words = nltk.word_tokenize(text)
-        file_name = "{}. speaker_{} {}-{}".format(idx, speaker_id, i[1], i[2])
+        file_name = "{} speaker_{} {}-{}".format(idx, speaker_id, i[1], i[2])
         waveform, alignment, _, _ = tts(
                 model, text, p=replace_pronunciation_prob, speaker_id=speaker_id, fast=True)
         dst_wav_path = join(dst_dir, "{}.wav".format(file_name))
