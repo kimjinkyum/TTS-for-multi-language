@@ -7,8 +7,8 @@ TTS system for English and Korean
 ```
 python main.py
 ```
-
-<img scr="https://user-images.githubusercontent.com/44569994/86529172-75b9f500-bee9-11ea-9d8b-dae93f1caa3f.png">
+<img src="https://user-images.githubusercontent.com/44569994/86529172-75b9f500-bee9-11ea-9d8b-dae93f1caa3f.png">
+* change this path to your environment
 
 
 
